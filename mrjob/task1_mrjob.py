@@ -1,4 +1,4 @@
-from mrjob import MRJob
+from mrjob.job import MRJob
 
 class TotalSalesPerCategory(MRJob):
 
