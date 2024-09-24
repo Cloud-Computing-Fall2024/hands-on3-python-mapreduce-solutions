@@ -54,10 +54,10 @@ This command will spin up the necessary Hadoop components (ResourceManager, Node
 Copy the mapper and reducer files for both tasks into the Hadoop ResourceManager container:
 
 ```bash
-docker cp mapper/mapper_task1.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
-docker cp reducer/reducer_task1.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
-docker cp mapper/mapper_task2.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
-docker cp reducer/reducer_task2.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
+docker cp mappers/mapper_task1.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
+docker cp reducers/reducer_task1.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
+docker cp mappers/mapper_task2.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
+docker cp reducers/reducer_task2.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
 ```
 
 For mrjob, copy the following mrjob Python scripts into the ResourceManager container:
