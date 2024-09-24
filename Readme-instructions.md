@@ -124,7 +124,7 @@ Now, you are ready to run the MapReduce job using Python and Hadoop Streaming. B
 Run the job using Hadoop Streaming:
 
 ```bash
-hadoop jar /opt/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming.jar \
+hadoop jar /opt/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar \
     -files mapper_task1.py,reducer_task1.py \
     -mapper mapper_task1.py \
     -reducer reducer_task1.py \
@@ -137,7 +137,7 @@ hadoop jar /opt/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming.jar \
 Run the job using Hadoop Streaming:
 
 ```bash
-hadoop jar /opt/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming.jar \
+hadoop jar /opt/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar \
     -files mapper_task2.py,reducer_task2.py \
     -mapper mapper_task2.py \
     -reducer reducer_task2.py \
