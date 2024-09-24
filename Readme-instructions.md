@@ -23,15 +23,17 @@ By completing this hands-on activity, students will:
 
 ---
 
-### 2. **Start the Hadoop Cluster Using Docker Compose**
+### 2. **Install the Hadoop Cluster on any Virtual Machine**
 
-The repository contains a `docker-compose.yml` file that configures a Hadoop cluster. To start the cluster, run the following command in the **GitHub Codespaces** terminal:
+#### For Windows Users:
+- Download virtual box from this [link](https://www.virtualbox.org/)
+- Download the iso file for Ubuntu from this [link](https://ubuntu.com/download/desktop)
+- After installing and setting up the ubuntu VM follow the instruction that are given in the lecture slides to setup hadoop on a VM
 
-```bash
-docker-compose up -d
-```
-
-This command will spin up the necessary Hadoop components (ResourceManager, NodeManager, etc.) inside Docker containers.
+#### For Mac User:
+- For mac user installing hadoop doesn't require any additional VM on top of Macos
+- You can follow the instruction given in this article to install hadoop natively on mac book
+- [Click here](https://medium.com/@vikramus4/install-and-configure-hadoop-3-3-6-in-mac-os-dd4be4da8846) to install hadoop on macos
 
 ---
 
@@ -47,57 +49,17 @@ This command will spin up the necessary Hadoop components (ResourceManager, Node
 
 ---
 
-### 4. **Move Python Scripts and Dataset to Docker Container**
+### 4. Clone the Github repo into your VM (for windows)
 
-#### **4.1 Move Python Mapper and Reducer to Container**
+- After accepting the assignment in the github classroom you will be given a repository into you github profile
+- Clone the repository into your appropriate VM
+- Finish the code for both tasks
 
-Copy the mapper and reducer files for both tasks into the Hadoop ResourceManager container:
-
-```bash
-docker cp mappers/mapper_task1.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
-docker cp reducers/reducer_task1.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
-docker cp mappers/mapper_task2.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
-docker cp reducers/reducer_task2.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
-```
-
-For mrjob, copy the following mrjob Python scripts into the ResourceManager container:
-
-```bash
-docker cp mrjob/task1_mrjob.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
-docker cp mrjob/task2_mrjob.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
-```
-
-#### **4.2 Move the Input Dataset to Container**
-
-Ensure that the dataset (`product_sales.csv`) is uploaded to the container:
-
-```bash
-docker cp input/product_sales.csv resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
-```
-
----
-
-### 5. **Connect to the ResourceManager Container**
-
-To run the Hadoop commands, you'll need to connect to the ResourceManager container:
-
-```bash
-docker exec -it resourcemanager /bin/bash
-```
-
-Navigate to the directory where your Python scripts and data are located:
-
-```bash
-cd /opt/hadoop-3.2.1/share/hadoop/mapreduce/
-```
-
----
-
-### 6. **Set Up HDFS for Input Data**
+### 5. **Set Up HDFS for Input Data**
 
 To run the MapReduce job, the input data file needs to be stored in Hadoop’s distributed file system (HDFS).
 
-#### **6.1 Create Directories in HDFS**
+#### **5.1 Create Directories in HDFS**
 
 Create a directory in HDFS for the input file:
 
@@ -105,7 +67,7 @@ Create a directory in HDFS for the input file:
 hadoop fs -mkdir -p /input/sales_data
 ```
 
-#### **6.2 Upload the Input File to HDFS**
+#### **5.2 Upload the Input File to HDFS**
 
 Upload the sales dataset (`product_sales.csv`) to HDFS:
 
@@ -115,49 +77,49 @@ hadoop fs -put product_sales.csv /input/sales_data/
 
 ---
 
-### 7. **Execute the Python MapReduce Job Using Hadoop Streaming**
+### 6. **Execute the Python MapReduce Job Using Hadoop Streaming**
 
 Now, you are ready to run the MapReduce job using Python and Hadoop Streaming. Below are the commands for each task.
 
-#### **7.1 Task 1: Total Sales per Product Category**
+#### **6.1 Task 1: Total Sales per Product Category**
 
 Run the job using Hadoop Streaming:
 
 ```bash
-hadoop jar /opt/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar \
-    -files mapper_task1.py,reducer_task1.py \
-    -mapper mapper_task1.py \
-    -reducer reducer_task1.py \
-    -input /input/sales_data/product_sales.csv \
+mapred streaming 
+    -files mapper_task1.py,reducer_task1.py 
+    -mapper mapper_task1.py 
+    -reducer reducer_task1.py 
+    -input /input/sales_data/product_sales.csv 
     -output /output/task1_total_sales
 ```
 
-#### **7.2 Task 2: Average Revenue per Product Category**
+#### **6.2 Task 2: Average Revenue per Product Category**
 
 Run the job using Hadoop Streaming:
 
 ```bash
-hadoop jar /opt/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar \
-    -files mapper_task2.py,reducer_task2.py \
-    -mapper mapper_task2.py \
-    -reducer reducer_task2.py \
-    -input /input/sales_data/product_sales.csv \
-    -output /output/task2_avg_revenue
+mapred streaming 
+    -files mapper_task1.py,reducer_task1.py 
+    -mapper mapper_task1.py 
+    -reducer reducer_task1.py 
+    -input /input/sales_data/product_sales.csv 
+    -output /output/task1_total_sales
 ```
 
 ---
 
-### 8. **View the Output of the MapReduce Jobs**
+### 7. **View the Output of the MapReduce Jobs**
 
 After running the jobs, you can view the output stored in HDFS.
 
-#### **8.1 Task 1 Output: Total Sales per Product Category**
+#### **7.1 Task 1 Output: Total Sales per Product Category**
 
 ```bash
 hadoop fs -cat /output/task1_total_sales/part-00000
 ```
 
-#### **8.2 Task 2 Output: Average Revenue per Product Category**
+#### **7.2 Task 2 Output: Average Revenue per Product Category**
 
 ```bash
 hadoop fs -cat /output/task2_avg_revenue/part-00000
@@ -165,39 +127,39 @@ hadoop fs -cat /output/task2_avg_revenue/part-00000
 
 ---
 
-### 9. **Run Python MapReduce Job Using mrjob**
+### 8. **Run Python MapReduce Job Using mrjob**
 
 If you prefer to use the `mrjob` framework, follow the steps below.
 
-#### **9.1 Run Locally (Optional for Testing)**
+#### **8.1 Run Locally (Optional for Testing)**
 
 You can test the mrjob MapReduce job locally by running:
 
 ```bash
-python task1_mrjob.py /path/to/product_sales.csv
+python3 task1_mrjob.py /path/to/product_sales.csv
 ```
 
-#### **9.2 Run mrjob on Hadoop Cluster (YARN)**
+#### **8.2 Run mrjob on Hadoop Cluster (YARN)**
 
 To run the mrjob MapReduce jobs on a Hadoop cluster, use the following command:
 
 ```bash
-python task1_mrjob.py -r hadoop hdfs:///input/sales_data/product_sales.csv -o hdfs:///output/task1_total_sales
+python3 task1_mrjob.py -r hadoop hdfs:///input/sales_data/product_sales.csv -o hdfs:///output/task1_total_sales
 ```
 
 Similarly, for Task 2:
 
 ```bash
-python task2_mrjob.py -r hadoop hdfs:///input/sales_data/product_sales.csv -o hdfs:///output/task2_avg_revenue
+python3 task2_mrjob.py -r hadoop hdfs:///input/sales_data/product_sales.csv -o hdfs:///output/task2_avg_revenue
 ```
 
 ---
 
-### 10. **Copy Output from HDFS to Local OS**
+### 9. **Copy Output from HDFS to Local OS**
 
 Once you have verified the results, copy the output from HDFS to your local file system.
 
-#### **10.1 Copy Output from HDFS**
+#### **9.1 Copy Output from HDFS**
 
 Use the following command to copy the output from HDFS to the Hadoop directory:
 
@@ -205,7 +167,7 @@ Use the following command to copy the output from HDFS to the Hadoop directory:
 hadoop fs -get /output /opt/hadoop-3.2.1/share/hadoop/mapreduce/
 ```
 
-#### **10.2 Copy Output from the Container to Your Local Machine**
+#### **9.2 Copy Output from the Container to Your Local Machine**
 
 Now, exit the ResourceManager container:
 
@@ -221,9 +183,9 @@ docker cp resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/output/ ./out
 
 ---
 
-### 11. **Submit Your Code and Output**
+### 10. **Submit Your Code and Output**
 
-#### **11.1 Push Your Code and Output to GitHub**
+#### **10.1 Push Your Code and Output to GitHub**
 
 Commit your changes, including the output from the MapReduce job, and push them to your GitHub repository:
 
@@ -233,7 +195,7 @@ git commit -m "Completed Python MapReduce with Hadoop Streaming"
 git push origin main
 ```
 
-#### **11.2 Submit the Assignment on GitHub Classroom**
+#### **10.2 Submit the Assignment on GitHub Classroom**
 
 Once you've pushed your code, go to GitHub Classroom and ensure your repository is submitted for the assignment. Make sure that the following are included:
 
