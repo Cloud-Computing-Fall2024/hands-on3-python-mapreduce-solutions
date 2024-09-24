@@ -60,6 +60,13 @@ docker cp mapper_task2.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapredu
 docker cp reducer_task2.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
 ```
 
+For mrjob, copy the following mrjob Python scripts into the ResourceManager container:
+
+```bash
+docker cp mrjob/task1_mrjob.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
+docker cp mrjob/task2_mrjob.py resourcemanager:/opt/hadoop-3.2.1/share/hadoop/mapreduce/
+```
+
 #### **4.2 Move the Input Dataset to Container**
 
 Ensure that the dataset (`product_sales.csv`) is uploaded to the container:
