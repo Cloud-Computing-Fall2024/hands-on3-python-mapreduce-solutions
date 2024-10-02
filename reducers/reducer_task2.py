@@ -2,32 +2,41 @@
 import sys
 
 current_category = None
-total_quantity = 0
-total_revenue = 0
+total_revenue = 0.0
+product_ids = set()
 
 # Read from STDIN line by line
 for line in sys.stdin:
     line = line.strip()
-    product_category, quantity, revenue = line.split("\t")
-    quantity = int(quantity)
-    revenue = float(revenue)
 
-    # If the product category changes (or if it's the first line)
+    # Parse the input from mapper
+    try:
+        product_category, value = line.split("\t")
+        product_id, revenue = value.split(",")
+        revenue = float(revenue)
+    except ValueError:
+        # Skip lines that don't have the expected format
+        continue
+
+    # If we are still processing the same category
     if current_category == product_category:
-        total_quantity += quantity
         total_revenue += revenue
+        product_ids.add(product_id)
     else:
-        # Output the total for the previous category
-        if current_category:
-            avg_revenue = total_revenue / total_quantity if total_quantity > 0 else 0
-            print(f"{current_category}\t{total_quantity}\t{avg_revenue}")
-        
-        # Reset totals for the new product category
-        current_category = product_category
-        total_quantity = quantity
-        total_revenue = revenue
+        # If this is not the first category, output the result for the previous category
+        if current_category is not None:
+            num_products = len(product_ids)
+            avg_revenue = total_revenue / num_products if num_products > 0 else 0
+            print(f"{current_category}\t{avg_revenue:.2f}")
 
-# Output the last product category
-if current_category:
-    avg_revenue = total_revenue / total_quantity if total_quantity > 0 else 0
-    print(f"{current_category}\t{total_quantity}\t{avg_revenue}")
+        # Reset for the new category
+        current_category = product_category
+        total_revenue = revenue
+        product_ids = set()
+        product_ids.add(product_id)
+
+# Output the result for the last category
+if current_category is not None:
+    num_products = len(product_ids)
+    avg_revenue = total_revenue / num_products if num_products > 0 else 0
+    print(f"{current_category}\t{avg_revenue:.2f}")
