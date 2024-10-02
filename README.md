@@ -77,7 +77,7 @@ hadoop fs -put product_sales.csv /input/sales_data/
 
 ---
 
-### 6. **Execute the Python MapReduce Job Using Hadoop Streaming**
+### 6. **Execute the Python MapReduce Job Using Hadoop Streaming (prefer to run in VM to get required output)**
 
 Now, you are ready to run the MapReduce job using Python and Hadoop Streaming. Below are the commands for each task.
 
@@ -93,6 +93,19 @@ mapred streaming
     -input /input/sales_data/product_sales.csv 
     -output /output/task1_total_sales
 ```
+   or
+
+```bash
+
+   hadoop jar /opt/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar  -files /home/hadoop/Downloads/hadoop-streaming-and-mrjob-main/mappers/mapper_task1.py,/home/hadoop/Downloads/hadoop-streaming-and-mrjob-main/reducers/reducer_task1.py  -mapper mapper_task1.py  -reducer reducer_task1.py  -input /input/product_sales.csv -output /output/task1_total_sales   
+
+```
+   or
+```bash
+   
+   hadoop jar /opt/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar  -files /home/hadoop/Downloads/hadoop-streaming-and-mrjob-main/mappers/mapper_task1.py,/home/hadoop/Downloads/hadoop-streaming-and-mrjob-main/reducers/reducer_task1.py  -mapper "python3 mapper_task1.py"  -reducer "python3 reducer_task1.py"  -input /input/product_sales.csv -output /output/task1_total_sales
+```
+
 
 #### **6.2 Task 2: Average Revenue per Product Category**
 
